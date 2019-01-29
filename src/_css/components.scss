@@ -1,0 +1,90 @@
+/* *NOTE: used for containers and their components upto a depth of 4 main -> inner -> inner2 -> inner3 */
+@import './index.scss';
+
+div#main-container {
+  margin: 4vh 2vh;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+
+  /* Media Query Breaks */
+  @media (max-width: 1000px) {
+    grid-template-columns: auto auto auto;
+  }
+
+  @media (max-width: 750px) {
+    grid-template-columns: auto auto;
+  }
+  @media (max-width: 500px) {
+    grid-template-columns: auto;
+  }
+}
+
+section.board {
+  min-width: 200px;
+  height: 92vh;
+  margin: 1vh 1vh;
+  border: 1px solid black;
+
+  header.board-header {
+    min-height: 6vh;
+    padding: 0 1.5vw;
+    display: grid;
+    grid-template-columns: 1em auto 1em;
+    grid-template-rows: 1em auto 1em;
+    border-bottom: 1px black solid;
+    background-color: #cecece;
+    p {
+      
+      display: block;
+      margin: 0;
+      grid-column: 2/ span 1;
+      grid-row: 2/ span 1;
+    }
+    div.icon {
+      grid-column: 3;
+      grid-row: 2;
+      justify-self: end;
+    }
+
+    div.icon:hover {
+      cursor: pointer;
+    }
+  }
+
+  div.board-body {
+    margin-top: 1em;
+    padding: 0px .5vw;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+
+  }
+}
+
+div.task-body {
+  display: grid;
+  height: 8vh;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: 1vh auto 1vh;
+  border: 1px solid black;
+  border-radius: 3px;
+
+  p {
+    display: block;
+    justify-self: center;
+    grid-column: 2/ span 1;
+    grid-row: 2/ span 1;
+  }
+
+  div.right-icon {
+    margin-right: 1vw;
+    justify-self: end;
+    align-self: center;
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  div.right-icon:hover {
+    cursor: pointer;
+  }
+}
