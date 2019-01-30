@@ -14,10 +14,14 @@ export default class Board extends Component {
   // returns task JSX objects to render
   getTasks = () => {
     const { name } = this.state;
-    const { tasks } = this.props;
-    console.log(`Tasks for ${this.state.name}: are \n ${tasks}`);
+    const { tasks, transferTask, prevBoard, nextBoard } = this.props;
     return tasks.map(task => 
-      <Task key={Helper.randomId()} task={task} board={name} />)
+      <Task key={Helper.randomId()} 
+      task={task} board={name} 
+      transferTask={transferTask}
+      prevBoard={prevBoard}
+      nextBoard={nextBoard}
+      />)
   }
 
   // adds task, no conditions
@@ -28,24 +32,9 @@ export default class Board extends Component {
     if (limit === null || limit > tasks.length){
     // add a task
       addTask(task, name);
-    // tasks.push(task);
     } else {
       alert('Limit reached. Delete or edit your task.')
     }
-  }
-
-  // transfers task between boards  
-  transferTask = (evt, { task, board, taskList }) => {
-    debugger;
-    let evtTask = evt.currentTarget.parentElement;
-    const iconType = evt.currentTarget.classList[0];
-    if (iconType === 'right-icon') {
-    
-    } else {
-
-    }
-    alert(`${iconType} was pressed`);
-    evt.preventDefault();
   }
 
   handleAddTask = evt => {
