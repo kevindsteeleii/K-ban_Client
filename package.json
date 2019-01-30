@@ -14,20 +14,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": "react-app",
-    "rules": {
-      "no-undef": false,
-      "no-unused-vars": false
-    }
-  },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "eslint": "^5.12.1"
-  }
+  ]
 }

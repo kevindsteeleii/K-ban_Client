@@ -3,16 +3,16 @@ import '../_css/components.scss';
 
 export default class Task extends Component {
   state = {
-    taskList: this.props.taskList || [],
+    // taskList: this.props.task.taskList || [],
     board: this.props.board,
-    task: this.props.task
+    task: this.props.task.task
   };
 
   // returns an array of subtasks as JSX to render
-  getTaskList = () => {
+  /* getTaskList = () => {
     const { taskList } = this.state;
     return taskList.map(item => <li>{item}</li>)
-  }
+  } */
 
   // adds subtasks after initial setup
   addSubTask = (contents) => {
@@ -26,10 +26,11 @@ export default class Task extends Component {
     const { transferTask } = this.props;
     return (
       <div className="task-body">
+      <div className="left-icon" onClick={evt => {transferTask(evt, this.props)}}><i  className="fas fa-chevron-left"/></div>
         <p className="task-contents">{task}</p>
         <div className="right-icon" onClick={evt => {transferTask(evt, this.props)}}><i  className="fas fa-chevron-right"/></div>
         <ul>
-          {this.getTaskList()}
+          {/* {this.getTaskList()} */}
         </ul>
       </div>
     )
