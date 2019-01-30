@@ -1,5 +1,6 @@
 import Task from '../components/task';
 import React, { Component } from 'react';
+import Helper from '../helper';
 import '../_css/components.scss';
 
 export default class Board extends Component {
@@ -7,26 +8,27 @@ export default class Board extends Component {
   state = {
     name: this.props.board.name || "",
     limited: this.props.board.limit? true : false,
-    limit: this.props.board.limit || null,
-    tasks: []
+    limit: this.props.board.limit || null
   } 
 
   // returns task JSX objects to render
   getTasks = () => {
-    const { tasks, name } = this.state;
+    const { name } = this.state;
+    const { tasks } = this.props;
+    console.log(`Tasks for ${this.state.name}: are \n ${tasks}`);
     return tasks.map(task => 
-    <Task key={`${name}-${task}`} task={task} board={name} transferTask={this.transferTask} taskList={task.taskList}/>)
+      <Task key={Helper.randomId()} task={task} board={name} />)
   }
 
   // adds task, no conditions
   addTask = (task) => {
-    const { tasks, limit } = this.state;
+    const { limit, name } = this.state;
+    const { tasks, addTask } = this.props;
     // check if there is a limit or is past its limit
     if (limit === null || limit > tasks.length){
-    // add a dummy task
-    tasks.push(task);
-    // set tasks in state to tasks that just updated
-    this.setState({ tasks });
+    // add a task
+      addTask(task, name);
+    // tasks.push(task);
     } else {
       alert('Limit reached. Delete or edit your task.')
     }
@@ -35,22 +37,28 @@ export default class Board extends Component {
   // transfers task between boards  
   transferTask = (evt, { task, board, taskList }) => {
     debugger;
-    alert('it works');
+    let evtTask = evt.currentTarget.parentElement;
+    const iconType = evt.currentTarget.classList[0];
+    if (iconType === 'right-icon') {
+    
+    } else {
+
+    }
+    alert(`${iconType} was pressed`);
     evt.preventDefault();
   }
 
   handleAddTask = evt => {
-    // clone tasks
+    // prompts for input for simple task
     let task = prompt('Enter a new task:');
     this.addTask(task);
-    // update the DOM
     evt.preventDefault();
   }
 
   render() {
     const { name } = this.state;
     return (
-      <section className="board">
+      <section className="board" data-name={name}>
         <header className="board-header">
           <p>{name}</p>
           <div onClick={this.handleAddTask} className="icon"><i className="fas fa-plus"/></div>

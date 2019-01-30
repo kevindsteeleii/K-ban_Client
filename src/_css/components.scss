@@ -76,6 +76,17 @@ div.task-body {
     grid-column: 2/ span 1;
     grid-row: 2/ span 1;
   }
+  div.left-icon {
+    margin-left: 1vw;
+    justify-self: start;
+    align-self: center;
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  div.left-icon:hover {
+    cursor: pointer;
+  }
 
   div.right-icon {
     margin-right: 1vw;
