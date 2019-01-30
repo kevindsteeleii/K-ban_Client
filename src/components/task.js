@@ -5,7 +5,7 @@ export default class Task extends Component {
   state = {
     // taskList: this.props.task.taskList || [],
     board: this.props.board,
-    task: this.props.task.task
+    task: this.props.task
   };
 
   // returns an array of subtasks as JSX to render
@@ -15,23 +15,33 @@ export default class Task extends Component {
   } */
 
   // adds subtasks after initial setup
-  addSubTask = (contents) => {
+ /*  addSubTask = (contents) => {
     const { taskList } = this.state;
     taskList.push(contents);
     this.setState({ taskList });
+  } */
+
+  transferTask = evt => {
+    const { transferTask, task, prevBoard, nextBoard } = this.props;
+    const { board } = this.state;
+    // let myBoard = document.querySelectorAll()
+    // ternary to determine which direction to go to
+    let newBoard = evt.currentTarget.classList[0] === 'right-icon' ? nextBoard : prevBoard;
+    transferTask(task, newBoard, board);
+    evt.preventDefault();
   }
 
   render() {
-    const { task } = this.state;
-    const { transferTask } = this.props;
+    const { task, visible } = this.state;
+    const { prevBoard, nextBoard } = this.props;
     return (
       <div className="task-body">
-      <div className="left-icon" onClick={evt => {transferTask(evt, this.props)}}><i  className="fas fa-chevron-left"/></div>
-        <p className="task-contents">{task}</p>
-        <div className="right-icon" onClick={evt => {transferTask(evt, this.props)}}><i  className="fas fa-chevron-right"/></div>
-        <ul>
-          {/* {this.getTaskList()} */}
-        </ul>
+      {!!prevBoard && <div className="left-icon"onClick={this.transferTask}><i  className="fas fa-chevron-left"/></div>}
+      <p className="task-contents">{task.task}</p>
+      {!!nextBoard && <div className="right-icon"onClick={this.transferTask}><i  className="fas fa-chevron-right"/></div>}
+      <ul>
+        {/* {this.getTaskList()} */}
+      </ul>
       </div>
     )
   }
