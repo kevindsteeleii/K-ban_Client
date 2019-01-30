@@ -62,8 +62,9 @@ section.board {
 }
 
 div.task-body {
-  display: grid;
+  margin: 1vh 0;
   height: 8vh;
+  display: grid;
   grid-template-columns: auto auto auto;
   grid-template-rows: 1vh auto 1vh;
   border: 1px solid black;
