@@ -7,67 +7,79 @@ export default class Container extends Component {
   state = {
     boards: [
       {
-        name: "Staging"
+        name: "Staging",
+        id: Helper.randomId()
       },
       {
-        name: "WIP"
+        name: "WIP",
+        id: Helper.randomId()
       },
       {
-        name: "Review"
+        name: "Review",
+        id: Helper.randomId()
       },
       {
         name: "Done",
+        id: Helper.randomId(),
         limit: 3
       }
     ],
-    tasks: {
-      Staging: [],
-      WIP: [],
-      Review: [],
-      Done: []
-    },
+    tasks: [],
     taskList: [],
     boardOrder: [],
     taskCount: 0
   };
 
-  addNewTask = (task, boardName) => {
+  componentDidMount() {
+    const { boardOrder, boards } = this.state;
+    for (let brd of boards) {
+      if (boardOrder.indexOf(brd.name) === -1){
+        boardOrder.push(brd.name);
+      }
+    }
+    this.setState({ boardOrder });
+  }
+
+  addNewTask = (task, boardId) => {
     // clone tasks from state
     let { tasks, taskCount } = this.state;
-    // assign tasks obj to the specific board name as key
-    let boardNameHash = tasks[boardName];
+
     // make a new Task object
     const newTask = {
       id: taskCount + 1,
       task,
-      idx: boardNameHash.length
+      boardId
     }
       // push to copied tasks
-      boardNameHash.push(newTask);
-      // set updated tasks array to state
-      tasks = {...tasks, [boardName]: boardNameHash};
+      tasks.push(newTask);
+
       this.setState({ tasks }, () => {
-        this.setState({taskCount: ++taskCount});
+        this.setState({taskCount: ++taskCount})
       });
   }
-  
 
-  transferTask = (task, transferBoard, oldBoard) => {
+  // filters the array of tasks by boardId
+  filterTasks = (boardId) => {
+    const { tasks } = this.state;
+    return tasks.filter(task => task.boardId === boardId)
+  }
+
+  transferTask = (task, boardId ) => {
     // clone tasks, boards, and boardOrder
-    let { tasks, boards, boardOrder } = this.state;
-    // deep copy of passed arg task
-    let copy = {...task};
-    // use the idx of boardsOrder to grab the board to be transferred to
-    let newBoard = boards[boardOrder.indexOf(transferBoard)]
+    let { boards, tasks, boardsOrder } = this.state;
 
+    // init variable for board
+    let transferBoard = null;
+    for (let brd of boards){
+      if (brd.id === boardId){
+        transferBoard = brd
+      }
+    }
+
+    let tasksAmount = this.filterTasks(transferBoard.id).length;
     // encapsulate in a conditional
-    if (typeof newBoard.limit === 'undefined' || newBoard.limit > tasks[transferBoard].length) {
-      // remove the offending task
-      tasks[oldBoard].splice(copy.idx, 1);
-      // change idx to index of length of board tasks
-      copy.idx = tasks[transferBoard].length;
-      // push clone to new board
-      tasks[transferBoard].push(copy);
+    if (typeof transferBoard.limit === 'undefined' || transferBoard.limit > tasksAmount) {
+      tasks[task.id - 1].boardId = transferBoard.id;
       this.setState({ tasks });
     } else {
       alert('Filled to capacity!')
@@ -75,26 +87,27 @@ export default class Container extends Component {
   }
 
   getBoards = () => {
-    const { boards, tasks, boardOrder } = this.state;
-/*     // init board names array
-    const boardNames = []; */
-    // populate with boards in order of appearance
-    for (let brd of boards){
-      /* boardNames */
-      if (boardOrder.indexOf(brd.name) === -1) {
-        boardOrder.push(brd.name);
-      }
-    }
+    const { boards, boardOrder } = this.state;
 
+    // make a hash that is used to store the pre-filtered tasks
+    const taskByBoard = {};
+    // if 
+    for (let brd of boardOrder){
+      // get index of boardName
+      let idx = boardOrder.indexOf(brd);
+      let boardId = boards[idx].id;
+      // use index to get the id
+      taskByBoard[boardId] = this.filterTasks(boardId);
+    }
     // map the array of objects to an array of JSX objects
     const boardsJSX = boards.map((board, idx) => {
-      // depending on the order in boardNames the item may or may not have a next/previous board
-      let prevBoard = idx === 0 ? null : /* boardNames */boardOrder[idx - 1];
-      let nextBoard = idx === boards.length - 1 ? null : /* boardNames */boardOrder[idx + 1];
+      // depending on the order in boardIds the item may or may not have a next/previous board
+      let prevBoard = idx === 0 ? null : /* boardIds */boards[idx - 1].id;
+      let nextBoard = idx === boards.length - 1 ? null : /* boardIds */boards[idx + 1].id;
       // return each indv'l Board JSX object 
       return (<Board 
-        key={Helper.randomId()} 
-        tasks={tasks[`${board.name}`]} 
+        key={boards[idx].id} 
+        tasks={taskByBoard[`${board.id}`]} 
         addTask={this.addNewTask} 
         prevBoard={prevBoard} 
         nextBoard={nextBoard} board={board}
@@ -106,8 +119,6 @@ export default class Container extends Component {
     // return boardsJSX
     return boardsJSX;
   }
-
-  
 
   render() {
     return (
