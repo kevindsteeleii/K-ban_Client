@@ -5,6 +5,10 @@ import '../_css/components.scss';
 
 export default class Board extends Component {
 
+  state = {
+    name: this.props.board.name
+  }
+
   // returns task JSX objects to render
   getTasks = () => {
     const { id } = this.props.board;
@@ -17,8 +21,7 @@ export default class Board extends Component {
       prevBoard={prevBoard}
       nextBoard={nextBoard}
       />)
-    }
-    
+    }   
   }
 
   // add tasks
@@ -41,12 +44,29 @@ export default class Board extends Component {
     evt.preventDefault();
   }
 
+  handleNameChange = evt =>  {
+    this.setState({ [evt.target.name]: evt.target.value })
+    evt.preventDefault();
+  }
+
+  // method that handles the name change in the parent state when off focus of the input element
+  handleOnBlur = evt => {
+    const { name } = this.state;
+    const { id, changeName } = this.props;
+    changeName(name,id);
+    evt.preventDefault();
+  }
+
   render() {
-    const { name } = this.props.board;
+    // const { name } = this.props.board;
+    const { name } = this.state;
     return (
       <section className="board" data-name={name}>
         <header className="board-header">
-          <p>{name}</p>
+          <form className="board-name">
+            <input onBlur={this.handleOnBlur} onChange={this.handleNameChange} value={name} type="text" name="name"/>
+          </form>
+          {/* <p>{name}</p> */}
           <div onClick={this.handleAddTask} className="icon"><i className="fas fa-plus"/></div>
         </header>
         <div className="board-body">
