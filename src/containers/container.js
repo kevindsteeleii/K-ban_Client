@@ -58,6 +58,20 @@ export default class Container extends Component {
       });
   }
 
+  // *TODO: write changeTaskName
+
+  changeBoardName = (newName, id) => {
+    // _NOTE: replace this w/ server-bound logic when server made or better yet have redux deal w/ it
+    const { boards } = this.state;
+    const changeBoards = boards.map(brd => {
+      if (brd.id === id) {
+        brd.name = newName
+      }
+      return brd
+    })
+    this.setState({ boards: changeBoards });
+  }
+
   // filters the array of tasks by boardId
   filterTasks = (boardId) => {
     const { tasks } = this.state;
@@ -107,11 +121,13 @@ export default class Container extends Component {
       // return each indv'l Board JSX object 
       return (<Board 
         key={boards[idx].id} 
+        id={boards[idx].id} 
         tasks={taskByBoard[`${board.id}`]} 
         addTask={this.addNewTask} 
         prevBoard={prevBoard} 
         nextBoard={nextBoard} board={board}
         transferTask={this.transferTask}
+        changeName={this.changeBoardName}
         />)
     })
     

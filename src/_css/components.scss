@@ -33,13 +33,21 @@ section.board {
     grid-template-rows: 1em auto 1em;
     border-bottom: 1px black solid;
     background-color: #cecece;
-    p {
-      
+ 
+    form.board-name {
       display: block;
       margin: 0;
       grid-column: 2/ span 1;
       grid-row: 2/ span 1;
+
+      input {
+        background-color: transparent;
+        border: transparent;
+        font-size: inherit;
+        text-align: center;
+      }
     }
+
     div.icon {
       grid-column: 3;
       grid-row: 2;
