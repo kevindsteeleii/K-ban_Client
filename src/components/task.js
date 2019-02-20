@@ -27,6 +27,7 @@ export default class Task extends Component {
     // let myBoard = document.querySelectorAll()
     // ternary to determine which direction to go to
     let newBoard = evt.currentTarget.classList[0] === 'right-icon' ? nextBoard : prevBoard;
+    this.setState({ board: nextBoard })
     transferTask(task, newBoard, board);
     evt.preventDefault();
   }
